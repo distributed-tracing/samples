@@ -18,15 +18,20 @@ const server = http.createServer((req, res) => {
   req.on('end', async () => {
     try {
       const payload = JSON.parse(body)
-      for (let i = 0; i < payload.length; ++i) {
-        const target = payload[i]
-        if (!target.url) {
-          continue
-        }
 
-        await makeRequest(target.url, JSON.stringify(target.arguments))
-        await delay(1000)
+      if (payload instanceof Array) {
+        for (let i = 0; i < payload.length; ++i) {
+          const target = payload[i]
+          if (!target.url) {
+            continue
+          }
+
+          await makeRequest(target.url, JSON.stringify(target.arguments))
+        }
+      } else if (payload.url) {
+        await makeRequest(payload.url, JSON.stringify(payload.arguments))
       }
+
     } catch (err) {
       console.error('Parsing body failed!')
       console.error(err)
@@ -53,7 +58,7 @@ function makeRequest(endpoint, body) {
     const req = http.request(opts, (res) => {
       res.resume()
       res.on('error', reject)
-      res.on('end', resolve)
+      res.on('end', () => resolve(delay(1000)))
     })
 
     req.on('error', reject)
