@@ -1,0 +1,10 @@
+[{
+  "url": "http://lmolkova-servicea.azurewebsites.net/api/forward",
+  "arguments": [{
+    "url": "http://dynatrace-servicea.azurewebsites.net/api/forward",
+    "arguments": [{
+      "url": "http://lmolkova-serviceb.azurewebsites.net/api/forward",
+      "arguments": [{}]
+    }]
+  }]
+}]
