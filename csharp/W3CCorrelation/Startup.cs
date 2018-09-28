@@ -1,6 +1,4 @@
-﻿using System.Linq;
-using System.Net.Http;
-using Microsoft.ApplicationInsights.AspNetCore;
+﻿using System.Net.Http;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -23,11 +21,6 @@ namespace W3CService
         {
             services.AddSingleton<HttpClient>();
             services.AddApplicationInsightsTelemetry(o => o.RequestCollectionOptions.EnableW3CDistributedTracing = true );
-
-            // enable localhost propagation for testing
-            var dependencyModuleConfigFactoryDescriptor =
-                services.Where(sd => sd.ServiceType == typeof(ITelemetryModuleConfigurator));
-            services.Remove(dependencyModuleConfigFactoryDescriptor.First());
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
